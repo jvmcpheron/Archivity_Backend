@@ -1,3 +1,7 @@
-# Introduction
+# Archivity Backend
 
-to test, run node src/server.js and check http://localhost:3000/activities
+## Getting Started
+
+1. npm install
+2. node src/server.js
+3. check http://localhost:3000/activities in the browser
