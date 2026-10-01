@@ -1,0 +1,25 @@
+{
+  "name": "archivity_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jvmcpheron/Archivity_Backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/jvmcpheron/Archivity_Backend/issues"
+  },
+  "homepage": "https://github.com/jvmcpheron/Archivity_Backend#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.117.2",
+    "fastify": "^5.12.5"
+  }
+}
