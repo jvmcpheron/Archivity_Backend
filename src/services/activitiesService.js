@@ -48,3 +48,27 @@ export async function addActivity(activity) {
 	if (!result.error) invalidateActivitiesCache();
 	return result;
 }
+
+export async function updateActivity(id, activity) {
+	const result = await supabase
+		.from('Activity')
+		.update(activity)
+		.eq('id', id)
+		.select()
+		.single();
+
+	if (!result.error) invalidateActivitiesCache();
+	return result;
+}
+
+export async function deleteActivity(id) {
+	const result = await supabase
+		.from('Activity')
+		.delete()
+		.eq('id', id)
+		.select()
+		.single();
+
+	if (!result.error) invalidateActivitiesCache();
+	return result;
+}

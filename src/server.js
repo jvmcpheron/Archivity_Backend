@@ -6,7 +6,24 @@ if (existsSync('.env')) {
 }
 
 const { supabase } = await import('./supabase/client.js');
-const { getActivities, addActivity } = await import('./services/activitiesService.js');
+const {
+  getActivities,
+  addActivity,
+  updateActivity,
+  deleteActivity,
+} = await import('./services/activitiesService.js');
+
+const activityProperties = {
+  Name: { type: 'string', nullable: true },
+  Location: { type: 'string', nullable: true },
+  Category: { type: 'string', nullable: true },
+  Description: { type: 'string', nullable: true },
+  Tier: { type: 'string', nullable: true },
+  Wishlist: { type: 'boolean', nullable: true },
+  Completed: { type: 'boolean', nullable: true },
+  Image_URL: { type: 'string', nullable: true },
+  URL: { type: 'string', nullable: true },
+};
 
 const app = Fastify();
 
@@ -18,11 +35,52 @@ app.get('/activities', async (_request, reply) => {
   return data;
 });
 
-app.post('/activities', async (request, reply) => {
-  const { data, error } = await addActivity(request.body);
+app.post(
+  '/activities',
+  {
+    schema: {
+      body: {
+        type: 'object',
+        additionalProperties: false,
+        properties: activityProperties,
+      },
+    },
+  },
+  async (request, reply) => {
+    const { data, error } = await addActivity(request.body);
+
+    if (error) return reply.code(500).send({ error });
+    return reply.code(201).send(data);
+  },
+);
+
+app.patch(
+  '/activities/:id',
+  {
+    schema: {
+      body: {
+        type: 'object',
+        additionalProperties: false,
+        minProperties: 1,
+        properties: activityProperties,
+      },
+    },
+  },
+  async (request, reply) => {
+    const { id } = request.params;
+    const { data, error } = await updateActivity(id, request.body);
+
+    if (error) return reply.code(500).send({ error });
+    return data;
+  },
+);
+
+app.delete('/activities/:id', async (request, reply) => {
+  const { id } = request.params;
+  const { data, error } = await deleteActivity(id);
 
   if (error) return reply.code(500).send({ error });
-  return reply.code(201).send(data);
+  return data;
 });
 
 // GET activity by ID
@@ -39,4 +97,5 @@ app.get('/activities/:id', async (req) => {
   return data;
 });
 
-app.listen({ port: 3000 });
+const port = Number(process.env.PORT || 3000);
+await app.listen({ port, host: '0.0.0.0' });
